@@ -3,12 +3,10 @@ import styled from "styled-components";
 interface StyledEventProps {
   bgColor: string;
 }
-
 interface SevenColGridProps {
-  fullheight?: boolean|string;
+  fullheight?: string|undefined;
   is28Days?: boolean;
 }
-
 export const Wrapper = styled.div`
   border: 1px solid;
   height: 99vh;
@@ -25,19 +23,22 @@ export const StyledEvent = styled.span<StyledEventProps>`
   cursor: move;
   text-transform: capitalize;
 `;
-
 export const SevenColGrid = styled.div<SevenColGridProps>`
-display: grid;
-grid-template-columns: repeat(7, 1fr);
-${({ fullheight }) => (fullheight === 'true' || fullheight === true) && `height: calc(100% - 75px);`}
-${({ fullheight, is28Days }) =>
-  (fullheight === 'true' || fullheight === true) && `grid-template-rows: repeat(${is28Days ? 4 : 5}, 1fr);`}
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+
+  ${(props) => props.fullheight==='true' && `height: calc(100% - 75px);`}
+  ${(props) =>
+    props.fullheight ==='true' &&
+    `grid-template-rows: repeat(${props.is28Days ? 4 : 5}, 1fr);`}
+
   div {
     display: grid;
     border: 1px solid;
     ${StyledEvent} {
       display: none;
     }
+
     ${StyledEvent}:nth-child(-n + 3) {
       display: block;
     }
@@ -53,6 +54,7 @@ ${({ fullheight, is28Days }) =>
       border-bottom: 2px solid red;
       position: relative;
     }
+
     span.active::before {
       content: "Today ";
       font-size: 14px;
@@ -96,6 +98,7 @@ export const PortalWrapper = styled.div`
   height: 200px;
   top: 50%;
   left: 50%;
+  /* border: 1px solid; */
   border-radius: 6px;
   transform: translate(-50%, -50%);
   box-shadow: 10px 10px 20px black;

@@ -1,30 +1,15 @@
 import React, { useRef, useState } from "react";
-import {
-  SevenColGrid,
-  Wrapper,
-  HeadDays,
-  DateControls,
-  SeeMore,
-  PortalWrapper,
-} from "../style/Calendar.styled";
+import {  SevenColGrid, Wrapper,HeadDays,DateControls,} from "../style/Calendar.styled";
 import { DAYS, MOCKAPPS } from "../data/data_time";
-import {
-  datesAreOnSameDay,
-  getDarkColor,
-  getDaysInMonth,
-  getMonthYear,
-  getSortedDays,
-  nextMonth,
-  prevMonth,
-} from "../utils/dateUtils";
-
+import {datesAreOnSameDay,getDarkColor,getDaysInMonth,getMonthYear,getSortedDays,nextMonth,prevMonth,} from "../utils/dateUtils";
+import { Portal } from "./Portal";
+import EventWrapper from "./EventWrapper";
 interface Event {
   date: Date;
   title: string;
   color: string;
 }
-
-const Calender: React.FC = () => {
+export default function Calender () {
   const [currentDate, setCurrentDate] = useState<Date>(new Date(2024, 3, 8));
   const [events, setEvents] = useState<Event[]>(MOCKAPPS);
   const dragDateRef = useRef<{ date: Date; target: string }>();
@@ -61,19 +46,18 @@ const Calender: React.FC = () => {
   1;
 
   const drop = (ev: React.DragEvent<HTMLDivElement>) => {
-      ev.preventDefault();
-      if (dragDateRef.current &&dragindexRef.current !== undefined &&dragDateRef.current.date) {
-        setEvents((prev) =>
-          prev.map((event, index) => {
-            if (index === dragindexRef.current!.index) {
-              event.date = dragDateRef.current!.date!;
-            }
-            return event;
-          })
-        );
-      }
-    };
-    
+    ev.preventDefault();
+    if (dragDateRef.current && dragindexRef.current !== undefined &&dragDateRef.current.date) {
+      setEvents((prev) =>
+        prev.map((event, index) => {
+          if (index === dragindexRef.current!.index) {
+            event.date = dragDateRef.current!.date!;
+          }
+          return event;
+        })
+      );
+    }
+  };
 
   const handleOnClickEvent = (event: Event) => {
     setShowPortal(true);
@@ -92,15 +76,13 @@ const Calender: React.FC = () => {
   return (
     <Wrapper>
       <DateControls>
-        <button
-          onClick={() => prevMonth(currentDate, setCurrentDate)}
-          name="arrow-back-circle-outline"
-        >{"<"}</button>
+        <button onClick={() => prevMonth(currentDate, setCurrentDate)} name="arrow-back-circle-outline">
+          {"<"}
+        </button>
         {getMonthYear(currentDate)}
-        <button
-          onClick={() => nextMonth(currentDate, setCurrentDate)}
-          name="arrow-forward-circle-outline"
-        >{">"}</button>
+        <button onClick={() => nextMonth(currentDate, setCurrentDate)} name="arrow-forward-circle-outline">
+          {">"}
+        </button>
       </DateControls>
       <SevenColGrid>
         {DAYS.map((day) => (
@@ -110,13 +92,10 @@ const Calender: React.FC = () => {
         ))}
       </SevenColGrid>
 
-      <SevenColGrid
-        fullheight={true}
-        is28Days={getDaysInMonth(currentDate) === 28}
-      >
+      <SevenColGrid fullheight="true" is28Days={getDaysInMonth(currentDate) === 28}>
+
         {getSortedDays(currentDate).map((day) => (
-          <div
-            key={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day}`}
+          <div key={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day}`}
             id={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day}`}
             onDragEnter={(e) =>
               onDragEnter(
@@ -141,9 +120,8 @@ const Calender: React.FC = () => {
               )
             }
           >
-            <span
-              className={`nonDRAG ${
-                datesAreOnSameDay(
+            <span className={`nonDRAG ${
+              datesAreOnSameDay(
                   new Date(),
                   new Date(
                     currentDate.getFullYear(),
@@ -177,69 +155,5 @@ const Calender: React.FC = () => {
       )}
     </Wrapper>
   );
-};
-
-interface EventWrapperProps {
-  events: Event[];
-  currentDate: Date;
-  day: number;
-  onDrag: (index: number, e: React.DragEvent<HTMLDivElement>) => void;
-  onClickEvent: (event: Event) => void;
 }
 
-const EventWrapper = ({events,currentDate,day,onDrag,onClickEvent,}:EventWrapperProps) => {
-  const filteredEvents = events.filter((ev) =>
-    datesAreOnSameDay(
-      ev.date,
-      new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
-    )
-  );
-
-  return (
-    <>
-      {filteredEvents.map((ev, index) => (
-        <div
-          key={ev.title}
-          onDragStart={(e) => onDrag(index, e)}
-          onClick={() => onClickEvent(ev)}
-          draggable
-          className="StyledEvent"
-          id={`${ev.color} ${ev.title}`}
-          style={{ backgroundColor: ev.color }}
-        >
-          {ev.title}
-        </div>
-      ))}
-
-      {filteredEvents.length > 2 && (
-        <SeeMore
-          onClick={(e) => {
-            e.stopPropagation();
-            console.log("clicked p");
-          }}
-        >
-          see more...
-        </SeeMore>
-      )}
-    </>
-  );
-};
-
-interface PortalProps {
-  title: string;
-  date: Date;
-  handleDelete: () => void;
-  handlePotalClose: () => void;
-}
-
-const Portal= ({title,date,handleDelete,handlePotalClose,}:PortalProps) => {
-  return (
-    <PortalWrapper>
-      <h2>{title}</h2>
-      <p>{date.toDateString()}</p>
-      <button onClick={handleDelete} name="trash-outline">Delete</button>
-      <button onClick={handlePotalClose} name="close-outline">Close</button>
-    </PortalWrapper>
-  );
-};
-export default Calender;
