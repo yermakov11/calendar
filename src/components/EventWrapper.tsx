@@ -21,10 +21,7 @@ const filterEventsByDay = (
   day: number
 ): Event[] => {
   return events.filter((ev) =>
-    datesAreOnSameDay(
-      ev.date,
-      new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
-    )
+    datesAreOnSameDay(ev.date,new Date(currentDate.getFullYear(), currentDate.getMonth(), day))
   );
 };
 

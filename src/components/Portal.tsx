@@ -7,7 +7,7 @@ interface PortalProps {
       handlePotalClose: () => void;
 }
 
-export const Portal= ({title,date,handleDelete,handlePotalClose,}:PortalProps) => {
+export const Portal=({title,date,handleDelete,handlePotalClose,}:PortalProps) => {
       return (
         <PortalWrapper>
           <h2>{title}</h2>
