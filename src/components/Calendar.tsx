@@ -1,16 +1,18 @@
-import React, { useRef, useState } from "react";
-import {  SevenColGrid, Wrapper,HeadDays,DateControls,} from "../style/Calendar.styled";
+import { useRef, useState } from "react";
+import { SevenColGrid,Wrapper,HeadDays, DateControls,} from "../style/Calendar.styled";
 import { DAYS, MOCKAPPS } from "../data/data_time";
-import {datesAreOnSameDay,getDarkColor,getDaysInMonth,getMonthYear,getSortedDays,nextMonth,prevMonth,} from "../utils/dateUtils";
+import {datesAreOnSameDay,getDarkColor,getDaysInMonth,getMonthYear,getSortedDays,nextMonth, prevMonth,} from "../utils/dateUtils";
 import { Portal } from "./Portal";
 import EventWrapper from "./EventWrapper";
+
 interface Event {
   date: Date;
   title: string;
   color: string;
 }
-export default function Calender () {
-  const [currentDate, setCurrentDate] = useState<Date>(new Date(2024, 3, 8));
+
+export default function Calender() {
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [events, setEvents] = useState<Event[]>(MOCKAPPS);
   const dragDateRef = useRef<{ date: Date; target: string }>();
   const dragindexRef = useRef<{ index: number; target: string }>();
@@ -43,15 +45,14 @@ export default function Calender () {
     const targetId = (e.target as HTMLDivElement)?.id || "";
     dragDateRef.current = { date, target: targetId };
   };
-  1;
 
   const drop = (ev: React.DragEvent<HTMLDivElement>) => {
     ev.preventDefault();
-    if (dragDateRef.current && dragindexRef.current !== undefined &&dragDateRef.current.date) {
+    if (dragDateRef.current &&dragindexRef.current !== undefined &&dragDateRef.current.date) {
       setEvents((prev) =>
-        prev.map((event, index) => {
-          if (index === dragindexRef.current!.index) {
-            event.date = dragDateRef.current!.date!;
+        prev.map((event) => {
+          if (dragindexRef.current!.target.includes(event.color)) {
+            return { ...event, date: dragDateRef.current!.date };
           }
           return event;
         })
@@ -76,11 +77,17 @@ export default function Calender () {
   return (
     <Wrapper>
       <DateControls>
-        <button onClick={() => prevMonth(currentDate, setCurrentDate)} name="arrow-back-circle-outline">
+        <button
+          onClick={() => prevMonth(currentDate, setCurrentDate)}
+          name="arrow-back-circle-outline"
+        >
           {"<"}
         </button>
         {getMonthYear(currentDate)}
-        <button onClick={() => nextMonth(currentDate, setCurrentDate)} name="arrow-forward-circle-outline">
+        <button
+          onClick={() => nextMonth(currentDate, setCurrentDate)}
+          name="arrow-forward-circle-outline"
+        >
           {">"}
         </button>
       </DateControls>
@@ -92,58 +99,43 @@ export default function Calender () {
         ))}
       </SevenColGrid>
 
-      <SevenColGrid fullheight="true" is28Days={getDaysInMonth(currentDate) === 28}>
-
-        {getSortedDays(currentDate).map((day) => (
-          <div key={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day}`}
-            id={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day}`}
-            onDragEnter={(e) =>
-              onDragEnter(
-                new Date(
-                  currentDate.getFullYear(),
-                  currentDate.getMonth(),
-                  day
-                ),
-                e
-              )
-            }
-            onDragOver={(e) => e.preventDefault()}
-            onDragEnd={drop}
-            onClick={(e) =>
-              addEvent(
-                new Date(
-                  currentDate.getFullYear(),
-                  currentDate.getMonth(),
-                  day
-                ),
-                e
-              )
-            }
-          >
-            <span className={`nonDRAG ${
-              datesAreOnSameDay(
-                  new Date(),
-                  new Date(
-                    currentDate.getFullYear(),
-                    currentDate.getMonth(),
-                    day
-                  )
-                )
-                  ? "active"
-                  : ""
-              }`}
+      <SevenColGrid
+        fullheight="true"
+        is28Days={getDaysInMonth(currentDate) === 28}
+      >
+        {getSortedDays(currentDate).map((day) => {
+          return (
+            <div
+              key={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day}`}
+              id={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day}`}
+              onDragEnter={(e) =>
+                onDragEnter(new Date(currentDate.getFullYear(),currentDate.getMonth(),day),e)
+              }
+              onDragOver={(e) => e.preventDefault()}
+              onDragEnd={drop}
+              onClick={(e) =>
+                addEvent(new Date(currentDate.getFullYear(),currentDate.getMonth(),day),e )
+              }
             >
-              {day}
-            </span>
-            <EventWrapper
-              events={events}
-              currentDate={currentDate}
-              day={day}
-              onDrag={drag}
-              onClickEvent={handleOnClickEvent}
-            />
-          </div>
-        ))}
+              <span
+                className={`nonDRAG ${
+                  datesAreOnSameDay(new Date(),new Date(currentDate.getFullYear(),currentDate.getMonth(),day))
+                    ? "active"
+                    : ""
+                }`}
+              >
+                {day}
+              </span>
+              <EventWrapper
+                events={events}
+                currentDate={currentDate}
+                day={day}
+                onDrag={drag}
+                onClickEvent={handleOnClickEvent}
+              />
+            </div>
+          );
+        })}
       </SevenColGrid>
       {showPortal && (
         <Portal
@@ -156,4 +148,3 @@ export default function Calender () {
     </Wrapper>
   );
 }
-
