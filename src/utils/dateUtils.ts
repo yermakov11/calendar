@@ -1,7 +1,7 @@
 import { DAYS } from "../data/data_time";
 
 export const getDaysInMonth = (date: Date): number => {
-  return new Date(date.getFullYear(), date.getMonth()+1, 0).getDate();
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 };
 
 export const range = (end: number): number[] => {
@@ -63,8 +63,6 @@ export const getDarkColor = (): string => {
 
 export const getSortedDays = (date: Date): number[] => {
   const daysInMonth = range(getDaysInMonth(date));
-  const index = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  const index = new Date(date.getFullYear(), date.getMonth(),1).getDay();
   return [...Array(index === 0 ? 6 : index - 1), ...daysInMonth];
 };
-
-
