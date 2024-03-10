@@ -9,9 +9,9 @@ export const MOCKAPPS = [
   { date: new Date(2024, 2, 9), title: "second", color: "#371395" },
 ];
 
-export const fetchHolidays = async ( year: number,month: number): Promise<string[]> => {
+export const fetchHolidays = async ( year: number,countryCode: string): Promise<string[]> => {
   try {
-    const URL = `https://date.nager.at/api/v2/PublicHolidays/${year}/${month}`;
+    const URL = `https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`;
     const response = await axios.get(URL);
     if (!response.data) {
       throw new Error("Failed to fetch holidays");

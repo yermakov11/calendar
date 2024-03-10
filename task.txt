@@ -14,12 +14,12 @@ Required Functionality
 - []  Holiday name must be fixed at of the cell and must not participate in re-ordering.
 
 In procces:
-(Last tasks)
-- []  Show worldwide holidays for each day in the calendar.
-- []  Holiday name must be fixed at of the cell and must not participate in re-ordering.
+
 Done:
 - [+]  Create and edit tasks inside calendar cells (days) in an inline manner.
 - [+]  Reassign tasks between days (calendar cells) using drag and drop.
  -[+]  Reorder task in one cell using drag and drop.
  -[+]  Filter tasks in the calendar by searching text.
  -[+]  Create and edit labels for tasks (color, text).
+ -[+]  Show worldwide holidays for each day in the calendar.
+ -[+]  Holiday name must be fixed at of the cell and must not participate in re-ordering.

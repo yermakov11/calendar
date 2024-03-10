@@ -4,17 +4,24 @@ interface StyledEventProps {
   bgColor: string;
 }
 interface SevenColGridProps {
-  fullheight?: string|undefined;
+  fullheight?: string | undefined;
   is28Days?: boolean;
 }
 export const Wrapper = styled.div`
   border: 1px solid;
-  height: 99vh;
+  height: 95vh;
+  .searchBar {
+    padding: 8px 12px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
 `;
 
 export const StyledEvent = styled.span<StyledEventProps>`
   background: ${({ bgColor }) => bgColor};
-  color: white;
+  color: black;
   text-align: left !important;
   padding: 2px 10px;
   margin: 0 2px;
@@ -27,9 +34,9 @@ export const SevenColGrid = styled.div<SevenColGridProps>`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
 
-  ${(props) => props.fullheight==='true' && `height: calc(100% - 75px);`}
+  ${(props) => props.fullheight === "true" && `height: calc(100% - 75px);`}
   ${(props) =>
-    props.fullheight ==='true' &&
+    props.fullheight === "true" &&
     `grid-template-rows: repeat(${props.is28Days ? 4 : 5}, 1fr);`}
 
   div {
@@ -50,7 +57,7 @@ export const SevenColGrid = styled.div<SevenColGridProps>`
     }
 
     span.active {
-      background-color: pink;
+      background-color: red;
       border-bottom: 2px solid red;
       position: relative;
     }
@@ -67,20 +74,28 @@ export const HeadDays = styled.span`
   border: 1px solid;
   height: 30px;
   padding: 5px;
-  background: darkolivegreen;
+  background: blue;
   color: white;
 `;
 
 export const DateControls = styled.div`
-  width: 100%;
   display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
   align-items: center;
-
-  ion-icon {
-    font-size: 1.6rem;
+  justify-content: center;
+  padding: 5px 0;
+  .arrow {
+    background-color: #3498db;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 14px;
+    margin: 0 4px;
     cursor: pointer;
+    border: none;
+    border-radius: 4px;
+  }
+  p {
+    color: white;
+    font-size: 20px;
   }
 `;
 
@@ -108,19 +123,36 @@ export const PortalWrapper = styled.div`
     font-size: 3rem;
   }
 
-  ion-icon {
-    font-size: 2rem;
-    color: red;
-    background: lightblue;
+  .portal-button-delete {
+    font-size: 1rem;
+    color: white;
+    background: red;
     padding: 10px 20px;
     border-radius: 6px;
+    margin-left: 15px;
+  }
+  .portal-button-close {
+    font-size: 1rem;
+    color: white;
+    background: green;
+    padding: 10px 20px;
+    border-radius: 6px;
+    margin-left: 15px;
+  }
+  .portal-button-edit {
+    font-size: 1rem;
+    color: white;
+    background: grey;
+    padding: 10px 20px;
+    border-radius: 6px;
+    margin-left: 15px;
   }
 
   p {
     margin-bottom: 15px;
   }
 
-  ion-icon[name="close-outline"] {
+  .portal-button[name="close-outline"] {
     position: absolute;
     top: 10px;
     right: 10px;

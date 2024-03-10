@@ -26,8 +26,8 @@ export default function Calender() {
   });
 
   useEffect(() => {
-    fetchHolidays(currentDate.getFullYear(), currentDate.getMonth() + 1).then((holidayDates) => {
-      setHolidays(holidayDates);
+    fetchHolidays(currentDate.getFullYear(), "IE").then((holidayNames) => {
+      setHolidays(holidayNames);
     });
   }, [currentDate]);
 
@@ -99,16 +99,17 @@ export default function Calender() {
     <Wrapper>
       <input 
         type="text" 
+        className="searchBar"
         placeholder="Search event..." 
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}/>
       <DateControls>
-        <button onClick={() => prevMonth(currentDate, setCurrentDate)}name="arrow-back-circle-outline">
-          {"<"}
+        <button onClick={() => prevMonth(currentDate, setCurrentDate)}className="arrow">
+          prev
         </button>
-        {getMonthYear(currentDate)}
-        <button onClick={() => nextMonth(currentDate, setCurrentDate)} name="arrow-forward-circle-outline">
-          {">"}
+        <p className="year">{getMonthYear(currentDate)}</p> 
+        <button onClick={() => nextMonth(currentDate, setCurrentDate)}className="arrow">
+          next
         </button>
       </DateControls>
       <SevenColGrid>

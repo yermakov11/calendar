@@ -4,7 +4,13 @@
   padding: 0;
   font-family: "Roboto Mono", monospace;
 }
-
+body{
+  background-color: rgb(116, 110, 110);
+}
+/* .year{
+  color: white;
+  font-size: 18px;
+} */
 .App {
   margin: 5px;
   -webkit-touch-callout: none; /* iOS Safari */
