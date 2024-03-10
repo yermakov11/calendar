@@ -48,7 +48,7 @@ export default function Calender() {
 
   const drop = (ev: React.DragEvent<HTMLDivElement>) => {
     ev.preventDefault();
-    if (dragDateRef.current &&dragindexRef.current !== undefined &&dragDateRef.current.date) {
+    if (dragDateRef.current&&dragindexRef.current !== undefined &&dragDateRef.current.date) {
       setEvents((prev) =>
         prev.map((event) => {
           if (dragindexRef.current!.target.includes(event.color)) {
@@ -97,11 +97,11 @@ export default function Calender() {
         fullheight="true"
         is28Days={getDaysInMonth(currentDate) === 28}
       >
-        {getSortedDays(currentDate).map((day) => {
+        {getSortedDays(currentDate).map((day,index) => {
           return (
             <div
-              key={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day}`}
-              id={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day}`}
+              key={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day} ${index}`}
+              id={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day}${index}`}
               onDragEnter={(e) =>
                 onDragEnter(new Date(currentDate.getFullYear(),currentDate.getMonth(),day),e)
               }

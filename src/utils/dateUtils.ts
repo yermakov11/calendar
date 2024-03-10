@@ -64,5 +64,6 @@ export const getDarkColor = (): string => {
 export const getSortedDays = (date: Date): number[] => {
   const daysInMonth = range(getDaysInMonth(date));
   const index = new Date(date.getFullYear(), date.getMonth(),1).getDay();
+  console.log([...Array(index === 0 ? 6 : index - 1), ...daysInMonth])
   return [...Array(index === 0 ? 6 : index - 1), ...daysInMonth];
 };
