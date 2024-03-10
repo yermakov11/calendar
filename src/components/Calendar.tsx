@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {SevenColGrid,Wrapper,HeadDays,DateControls,} from "../style/Calendar.styled";
-import { DAYS, MOCKAPPS } from "../data/data_time";
+import { DAYS, MOCKAPPS,fetchHolidays } from "../data/data_time";
 import {datesAreOnSameDay,getDarkColor,getDaysInMonth,getMonthYear,getSortedDays,nextMonth,prevMonth,} from "../utils/dateUtils";
 import { Portal } from "./Portal";
 import EventWrapper from "./EventWrapper";
@@ -17,11 +17,23 @@ export default function Calender() {
   const dragDateRef = useRef<{ date: Date; target: string }>();
   const dragindexRef = useRef<{ index: number; target: string }>();
   const [showPortal, setShowPortal] = useState<boolean>(false);
+  const [searchText, setSearchText] = useState<string>("");
+  const [holidays, setHolidays] = useState<string[]>([]);
   const [portalData, setPortalData] = useState<Event>({
     date: new Date(),
     title: "",
     color: "",
   });
+
+  useEffect(() => {
+    fetchHolidays(currentDate.getFullYear(), currentDate.getMonth() + 1).then((holidayDates) => {
+      setHolidays(holidayDates);
+    });
+  }, [currentDate]);
+
+  const filteredEvents = events.filter((event) =>
+    event.title.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   const addEvent = (date: Date,event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (!(event.target as HTMLDivElement).classList.contains("StyledEvent")) {
@@ -74,8 +86,22 @@ export default function Calender() {
     handlePotalClose();
   };
 
+  const handlePortalEdit = () => {
+    const newText = window.prompt("Edit event name", portalData.title);
+    if (newText !== null && newText !== "") {
+      setEvents((prevEvents) =>
+         prevEvents.map((ev) =>ev.title === portalData.title? { ...ev, title: newText }:ev)
+      );
+    }
+  };
+
   return (
     <Wrapper>
+      <input 
+        type="text" 
+        placeholder="Search event..." 
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}/>
       <DateControls>
         <button onClick={() => prevMonth(currentDate, setCurrentDate)}name="arrow-back-circle-outline">
           {"<"}
@@ -111,17 +137,20 @@ export default function Calender() {
                 addEvent(new Date(currentDate.getFullYear(),currentDate.getMonth(),day),e)
               }
             >
-              <span
+               <span
                 className={`nonDRAG ${
                   datesAreOnSameDay(
-                    new Date(),new Date(currentDate.getFullYear(),currentDate.getMonth(),day)
-                )? "active": ""
-                }`}
+                    new Date(),
+                    new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
+                  )
+                    ? "active"
+                    : ""
+                } ${holidays ? "holiday" : ""}`}
               >
                 {day}
               </span>
               <EventWrapper
-                events={events}
+                events={filteredEvents}
                 currentDate={currentDate}
                 day={day}
                 onDrag={drag}
@@ -137,6 +166,7 @@ export default function Calender() {
           date={portalData.date}
           handleDelete={handleDelete}
           handlePotalClose={handlePotalClose}
+          handlePortalEdit={handlePortalEdit}
         />
       )}
     </Wrapper>
