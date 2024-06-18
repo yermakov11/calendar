@@ -27,7 +27,7 @@ const filterEventsByDay = (
 
 const EventWrapper = ({events,currentDate,day,onDrag,onClickEvent,}:EventWrapperProps) => {
   const filteredEvents = filterEventsByDay(events, currentDate, day);
-  console.log(filteredEvents);
+  
   return (
     <>
       {filteredEvents.map((ev, index) => (
